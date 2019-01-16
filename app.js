@@ -73,12 +73,14 @@ let ancalagons = {
   ]
 };
 
+//get hello world
 app.get("/", (req, res) => {
   res.send({
     massage: "Hallo Ancalagon"
   });
 });
 
+//get all ancalagons items
 app.get("/ancalagons", (req, res) => {
   res.send({
     count: ancalagons.length,
@@ -86,6 +88,7 @@ app.get("/ancalagons", (req, res) => {
   });
 });
 
+//get ancalagon by ID
 app.get("/ancalagons/:id", (req, res) => {
   const ancalagon = ancalagons.data.find(ancalagon => {
     return ancalagon.id === Number(req.params.id);
@@ -96,6 +99,7 @@ app.get("/ancalagons/:id", (req, res) => {
   });
 });
 
+//psot new member of ancalagons
 app.post("/ancalagons", (req, res) => {
   const newAncalagon = {
     id: ancalagons.next_id,
