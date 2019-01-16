@@ -1,0 +1,11 @@
+{
+  "name": "learn-express",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "masagus hariadi arief <adi.arief77@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  }
+}
