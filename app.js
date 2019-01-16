@@ -88,6 +88,20 @@ app.get("/ancalagons", (req, res) => {
   });
 });
 
+//seacrh ancalagon by name
+app.get("/ancalagons/search", (req, res) => {
+  const queryName = req.query.name.toLowerCase();
+
+  const foundAncalagon = ancalagons.data.find(ancalagon => {
+    return ancalagon.name.toLowerCase().includes(queryName);
+  });
+
+  res.send({
+    query: req.query,
+    data: foundAncalagon
+  });
+});
+
 //get ancalagon by ID
 app.get("/ancalagons/:id", (req, res) => {
   const ancalagon = ancalagons.data.find(ancalagon => {
