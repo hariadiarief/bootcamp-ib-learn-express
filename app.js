@@ -7,7 +7,7 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
-const ancalagons = {
+let ancalagons = {
   next_id: 13,
   data: [
     {
@@ -103,8 +103,12 @@ app.post("/ancalagons", (req, res) => {
     gender: req.body.gender
   };
 
-  ancalagons.data.push(newAncalagon);
-  ancalagons.next_id += 1;
+  const newAncalagons = {
+    next_id: ancalagons.next_id + 1,
+    data: ancalagons.data.concat(newAncalagon)
+  };
+
+  ancalagons = newAncalagons;
 
   res.send({
     newData: newAncalagon,
