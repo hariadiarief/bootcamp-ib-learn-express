@@ -1,9 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const app = express();
 const port = 3000;
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
@@ -13,62 +15,62 @@ let ancalagons = {
     {
       id: 1,
       name: "Arsyad",
-      gander: "Male"
+      gender: "Male"
     },
     {
       id: 2,
       name: " Gatot",
-      gander: "Male"
+      gender: "Male"
     },
     {
       id: 3,
       name: "Lion",
-      gander: "Male"
+      gender: "Male"
     },
     {
       id: 4,
       name: " Manda",
-      gander: "Female"
+      gender: "Female"
     },
     {
       id: 5,
       name: "Dheta",
-      gander: "Female"
+      gender: "Female"
     },
     {
       id: 6,
       name: " Furqan",
-      gander: "Male"
+      gender: "Male"
     },
     {
       id: 7,
       name: "Ipul",
-      gander: "Male"
+      gender: "Male"
     },
     {
       id: 8,
       name: "Iwin",
-      gander: "Male"
+      gender: "Male"
     },
     {
       id: 9,
       name: "Adi",
-      gander: "Male"
+      gender: "Male"
     },
     {
       id: 10,
       name: "Panji",
-      gander: "Male"
+      gender: "Male"
     },
     {
       id: 11,
       name: "Rina",
-      gander: "Female"
+      gender: "Female"
     },
     {
       id: 12,
       name: "Yusuf",
-      gander: "Male"
+      gender: "Male"
     }
   ]
 };
@@ -88,20 +90,6 @@ app.get("/ancalagons", (req, res) => {
   });
 });
 
-//seacrh ancalagon by name
-app.get("/ancalagons/search", (req, res) => {
-  const queryName = req.query.name.toLowerCase();
-
-  const foundAncalagon = ancalagons.data.find(ancalagon => {
-    return ancalagon.name.toLowerCase().includes(queryName);
-  });
-
-  res.send({
-    query: req.query,
-    data: foundAncalagon
-  });
-});
-
 //get ancalagon by ID
 app.get("/ancalagons/:id", (req, res) => {
   const ancalagon = ancalagons.data.find(ancalagon => {
@@ -112,8 +100,41 @@ app.get("/ancalagons/:id", (req, res) => {
     data: ancalagon
   });
 });
+//seacrh ancalagon by name
+app.get("/ancalagons/search", (req, res) => {
+  const queryName = req.query.name.toLowerCase();
 
-//psot new member of ancalagons
+  const foundAncalagon = ancalagons.data.filter(ancalagon => {
+    return ancalagon.name.toLowerCase().includes(queryName);
+  });
+
+  res.send({
+    query: req.query,
+    data: foundAncalagon
+  });
+});
+
+//seacrh ancalagon by name and gender
+app.get("/ancalagons/search", (req, res) => {
+  const queryName = req.query.name.toLowercase();
+  const gender = req.query.gender.toLowerCase();
+
+  const foundAncalagon = ancalagons.data.filter(ancalagon => {
+    return (
+      ancalagon.name
+        .toLocaleLowerCase()
+        .includes(queryName.toLocaleLowerCase()) &&
+      ancalagon.gender.toLocaleLowerCase().includes()(
+        queryName.toLocaleLowerCase()
+      )
+    );
+  });
+  res.send({
+    data: foundAncalagon
+  });
+});
+
+//Add new member of ancalagons
 app.post("/ancalagons", (req, res) => {
   const newAncalagon = {
     id: ancalagons.next_id,
@@ -131,6 +152,45 @@ app.post("/ancalagons", (req, res) => {
   res.send({
     newData: newAncalagon,
     data: ancalagons
+  });
+});
+
+//Delete All Ancalagon
+app.delete("/ancalagons", (req, res) => {
+  ancalagons.data.splice(0, ancalagons.data.length);
+
+  res.send({
+    data: ancalagons.data
+  });
+});
+
+//Delete Ancalagon by ID
+app.delete("/ancalagons/:id", (req, res) => {
+  const deleteAncalagon = ancalagons.data.filter(
+    item => item.id != Number(req.params.id)
+  );
+  ancalagons.data = deleteAncalagon;
+
+  res.send({
+    data: ancalagons.data
+  });
+});
+
+//Editing ancalagon by ID
+app.put("/ancalagons/:id", (req, res) => {
+  const editedAncalagon = ancalagons.data.filter(ancalagon => {
+    if (ancalagon.id === Number(req.params.id)) {
+      return Object.assign(ancalagon, req.body);
+    } else {
+      return ancalagon;
+    }
+  });
+
+  ancalagons = { data: editedAncalagon };
+
+  res.send({
+    next_id: ancalagons.next_id,
+    data: editedAncalagon
   });
 });
 
